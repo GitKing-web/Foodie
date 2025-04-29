@@ -17,7 +17,7 @@ const store = createStore({
 
         mealByLetter: async({ commit }, payload) => {
             const res = await Axios.get(`/search.php?f=${payload}`)
-            res.data ? commit('setmealsByLetter' ,res.data.meals) : {}
+            res.data ? commit('setMealsByLetter' ,res.data.meals) : {}
         },
 
         forTheDay: async() => {
@@ -31,7 +31,7 @@ const store = createStore({
             state.searchedMeals = payload
         },
 
-        setmealsByLetter:(state, payload) => {
+        setMealsByLetter:(state, payload) => {
             state.mealsByLetter = payload
         }, 
 
