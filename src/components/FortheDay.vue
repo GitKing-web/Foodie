@@ -1,76 +1,131 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import store from '../store';
-import Axios from '../Axios';
-const meal = computed(() => store.state.mealForTheDay)
-// async function getMeal() {
-//     const res = await Axios.get('random.php')
-//     store.commit('setMealForTheDay', res.data.meals)
-// }
+
+const meal = computed(() => store.state.mealForTheDay);
 
 onMounted(() => {
-    // store.state.mealForTheDay === null ? getMeal() : {}
-    store.dispatch('forTheDay', meal)
-})
+  if (!meal.value || Object.keys(meal.value).length === 0) {
+    store.dispatch('forTheDay');
+  }
+});
 </script>
 
 <template>
-    <h3 class="text-center mt"><span>Meal</span> of The Moment</h3>
-    <div class="cards">
-        <div class="info">
-            <div class="title">
-                <h3><i>{{ meal.strMeal }}</i></h3>
-            </div>
-            <div class="ist mt-3 a">
-                <b><i>Instructions:</i></b>
-                <p class="mt-3">{{ meal.strInstructions }}</p>
-            </div>
-            <div class="cat a">
-                <b><i>Category:</i></b> <p class="mt-3">{{ meal.strCategory }}</p>
-            </div>
+  <section class="meal-section">
+    <h2 class="heading"><span>Meal</span> of the Moment</h2>
+    <div class="meal-card">
+      <div class="meal-info">
+        <h3 class="meal-title">{{ meal.strMeal }}</h3>
+
+        <div class="meal-detail">
+          <h4><i>Instructions</i></h4>
+          <p class="meal-text">{{ meal.strInstructions }}</p>
         </div>
 
-        <div class="img">
-            <img :src="meal.strMealThumb" :alt="meal.strMeal">
+        <div class="meal-detail">
+          <h4><i>Category</i></h4>
+          <p>{{ meal.strCategory }}</p>
         </div>
+      </div>
+
+      <div class="meal-image">
+        <img :src="meal.strMealThumb" :alt="meal.strMeal" />
+      </div>
     </div>
+  </section>
 </template>
 
 <style scoped>
-.cards{
-    display: flex;
-    padding: 2rem;
-    align-items: center;
+.meal-section {
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
 }
-.mt{
-    margin-top: 4rem;
-    font-size: 40px;
-    font-weight: 700;
-}
-span{
-    color: green;
-}
-b i{
-    border: 3px solid green;
-    padding: 5px;
-    border-radius: 20px;
-}
-.info{
-    flex: 2;
-}
-.img{
-    flex: 1;
 
+.heading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
 }
-img{
-    width: 100%;
-    border: 8px solid green;
-    border-radius: 50%;
-    height: 20%;
-    object-fit: cover;
+
+.heading span {
+  color: #27ae60;
 }
-.ist p{
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
+
+.meal-card {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  background: white;
+  min-height: 500px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.meal-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.meal-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.meal-detail h4 {
+  display: inline-block;
+  background: #27ae60;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.meal-text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meal-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.meal-image img {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid #27ae60;
+  transition: transform 0.3s ease;
+}
+
+.meal-image img:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .meal-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .meal-info {
+    text-align: center;
+  }
 }
 </style>
